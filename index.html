@@ -355,6 +355,129 @@ body.v-lock { overflow: hidden; }
 .v-x { pointer-events: auto; display: flex; cursor: pointer; }
 .cm-plain .sheet { min-height: 100vh; min-height: 100dvh; }
 
+
+/* ===== 추가 기능: 입력창 / 푸시 알림 / 전화 수신 ===== */
+.dc-input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; padding: 0; margin: 0; color: var(--ig-ink); font: inherit; font-size: 16px; line-height: 1.3; -webkit-appearance: none; appearance: none; }
+.dc-input::placeholder { color: var(--ig-sec); opacity: 1; }
+.dc-send { display: none; flex: none; padding: 0 2px; border: 0; background: none; color: var(--ig-blue); font: inherit; font-size: calc(15px * var(--fs, 1)); font-weight: 600; cursor: pointer; white-space: nowrap; }
+.ig .dc-in.typing > svg { display: none; }
+.dc-in.typing .dc-send { display: block; }
+.dc-m.pop { animation: dcPop .22s ease-out; transform-origin: right bottom; }
+.dc-m.them.pop { transform-origin: left bottom; }
+@keyframes dcPop { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+.dm-row.bump { animation: rowBump .5s ease-out; }
+@keyframes rowBump { from { background: rgba(0,149,246,.12); } to { background: transparent; } }
+
+/* 상단 푸시 알림 */
+.ig-push { position: fixed; top: 0; left: 50%; z-index: 60; width: calc(100% - 16px); max-width: 454px; margin-top: calc(8px + env(safe-area-inset-top, 0px)); transform: translate(-50%, -160%); opacity: 0; pointer-events: none; transition: transform .5s cubic-bezier(.2, .9, .3, 1.08), opacity .3s; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+.ig-push.show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.ig-push-card { display: flex; align-items: center; gap: 11px; padding: 12px 14px; border-radius: 22px; background: rgba(247,247,250,.94); color: #000; box-shadow: 0 10px 30px rgba(0,0,0,.22), 0 0 0 .5px rgba(0,0,0,.08); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); cursor: pointer; }
+body.v-dark .ig-push-card { background: rgba(44,44,48,.94); color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.5), 0 0 0 .5px rgba(255,255,255,.1); }
+.ig-push-ico { width: 38px; height: 38px; border-radius: 9px; flex: none; display: flex; align-items: center; justify-content: center; color: #fff; background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
+.ig-push-tx { flex: 1; min-width: 0; line-height: 1.3; }
+.ig-push-hd { display: flex; align-items: center; justify-content: space-between; font-size: 12px; opacity: .6; letter-spacing: .01em; }
+.ig-push-tt { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ig-push-bd { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 전화 수신 / 통화 화면 */
+body.call-open { overflow: hidden; }
+.ig-call { position: fixed; inset: 0; z-index: 50; display: flex; justify-content: center; background: #000; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; animation: callIn .35s ease-out; }
+.ig-call[hidden] { display: none; }
+@keyframes callIn { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: none; } }
+.ig-call-in { position: relative; width: 100%; max-width: 470px; height: 100%; display: flex; flex-direction: column; align-items: center; padding: calc(70px + env(safe-area-inset-top, 0px)) 24px calc(56px + env(safe-area-inset-bottom, 0px)); color: #fff; overflow: hidden; background: linear-gradient(180deg, #2b2140 0%, #14101f 55%, #07060b 100%); }
+.ig-call-ap { font-size: 14px; opacity: .65; letter-spacing: .02em; }
+.ig-call-av { position: relative; width: 132px; height: 132px; margin-top: 44px; flex: none; }
+.ig-call-av img { position: relative; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; background: #3a3a3c; }
+.ig-call-av::before, .ig-call-av::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); opacity: 0; }
+.ig-call[data-state=ring] .ig-call-av::before { animation: callPulse 2s ease-out infinite; }
+.ig-call[data-state=ring] .ig-call-av::after { animation: callPulse 2s ease-out .9s infinite; }
+@keyframes callPulse { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.7); opacity: 0; } }
+.ig-call-name { margin-top: 22px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+.ig-call-st { margin-top: 6px; font-size: 16px; opacity: .7; font-variant-numeric: tabular-nums; }
+.ig-call-sub { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; min-height: 120px; padding: 0 4px; }
+.ig-call-line { text-align: center; animation: lineIn .45s ease-out; }
+.ig-call-line small { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; opacity: .55; letter-spacing: .02em; }
+.ig-call-line span { display: block; font-size: 24px; font-weight: 600; line-height: 1.4; letter-spacing: -.02em; word-break: keep-all; text-shadow: 0 2px 14px rgba(0,0,0,.45); }
+@keyframes lineIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.ig-call-btns { display: flex; justify-content: center; gap: 72px; width: 100%; }
+.ig-call-b { display: flex; flex-direction: column; align-items: center; gap: 10px; border: 0; background: none; color: #fff; font: inherit; font-size: 13px; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
+.ig-call-b i { width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform .15s; }
+.ig-call-b:active i { transform: scale(.92); }
+.ig-call-b.no i { background: #ff3b30; }
+.ig-call-b.ok i { background: #34c759; animation: callWiggle 1.1s ease-in-out infinite; }
+.ig-call-b.no i svg { transform: rotate(135deg); }
+@keyframes callWiggle { 0%, 100% { transform: rotate(0); } 10%, 30% { transform: rotate(-14deg); } 20%, 40% { transform: rotate(14deg); } 50% { transform: rotate(0); } }
+.ig-call-b.ok { display: flex; }
+.ig-call[data-state=live] .ig-call-b.ok, .ig-call[data-state=end] .ig-call-b.ok, .ig-call[data-state=end] .ig-call-b.no { display: none; }
+.ig-call[data-state=ring] .ig-call-sub { visibility: hidden; }
+.ig-call[data-state=end] .ig-call-in { filter: saturate(.6) brightness(.85); transition: filter .4s; }
+
+/* ===== 추가 기능 2: 발신 통화 / 타이핑 표시 / 가상 키보드 ===== */
+.ig-call[data-state=dial] .ig-call-av::before { animation: callPulse 2s ease-out infinite; }
+.ig-call[data-state=dial] .ig-call-av::after { animation: callPulse 2s ease-out .9s infinite; }
+.ig-call[data-state=dial] .ig-call-sub { visibility: hidden; }
+.ig-call[data-state=dial] .ig-call-b.ok { display: none; }
+.dc-top > svg.dc-callbtn { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.dc-top > svg.dc-callbtn:active { opacity: .5; }
+.dc-b.dots { display: flex; align-items: center; gap: 4px; padding: 14px 14px; }
+.dc-b.dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--ig-sec); animation: dotB 1.1s ease-in-out infinite; }
+.dc-b.dots i:nth-child(2) { animation-delay: .18s; }
+.dc-b.dots i:nth-child(3) { animation-delay: .36s; }
+@keyframes dotB { 0%, 60%, 100% { transform: translateY(0); opacity: .45; } 30% { transform: translateY(-4px); opacity: 1; } }
+.ig.kb-on .dc-foot { padding-bottom: 8px; }
+.ig-kb { flex: none; height: 0; overflow: hidden; background: #d2d4db; transition: height .38s cubic-bezier(.2, .8, .2, 1); -webkit-user-select: none; user-select: none; }
+.ig-kb.open { height: calc(262px + env(safe-area-inset-bottom, 0px)); }
+.ig-kb-in { display: flex; flex-direction: column; gap: 11px; padding: 10px 3px calc(8px + env(safe-area-inset-bottom, 0px)); }
+.ig-kb-r { display: flex; justify-content: center; gap: 6px; padding: 0 3px; }
+.ig-kb-k { flex: 1; max-width: 37px; height: 42px; border-radius: 5px; background: #fff; color: #000; box-shadow: 0 1px 0 rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; font-size: 20px; transition: transform .06s, background .06s; }
+.ig-kb-k.hit { background: #b4b8c2; transform: translateY(1px); }
+.ig-kb-k.w { flex: 1.45; max-width: none; background: #aeb3bd; font-size: 15px; }
+.ig-kb-k.sp { flex: 5; max-width: none; font-size: 15px; }
+.ig-kb-k.go { flex: 2; max-width: none; background: #0095f6; color: #fff; font-size: 15px; font-weight: 600; }
+.ig-kb-k.go.hit { background: #0a7fd1; }
+.ig[data-theme=dark] .ig-kb { background: #1b1b1d; }
+.ig[data-theme=dark] .ig-kb-k { background: #5a5a5e; color: #fff; box-shadow: 0 1px 0 rgba(0,0,0,.6); }
+.ig[data-theme=dark] .ig-kb-k.w { background: #3a3a3d; }
+.ig[data-theme=dark] .ig-kb-k.hit { background: #7a7a80; }
+.ig[data-theme=dark] .ig-kb-k.go { background: #0095f6; }
+
+/* ===== 추가 기능 3: 동영상 메시지 / 선택지 모달 / 동영상 플레이어 / 공감 반응 ===== */
+.dc-b.vid { cursor: pointer; font-weight: 600; -webkit-tap-highlight-color: transparent; }
+.dc-b.vid:active { opacity: .7; }
+.dc-b.vid.dim { color: #8e8e8e !important; cursor: default; pointer-events: none; font-weight: 500; }
+.dc-react.pop { animation: reactPop .42s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes reactPop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+/* 선택지 모달 (전체 화면 블러) */
+.ig-choice { position: fixed; inset: 0; z-index: 52; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,0); -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); visibility: hidden; pointer-events: none; transition: background .45s, backdrop-filter .45s, -webkit-backdrop-filter .45s, visibility 0s .45s; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+.ig-choice.show { background: rgba(0,0,0,.34); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2); visibility: visible; pointer-events: auto; transition: background .45s, backdrop-filter .45s, -webkit-backdrop-filter .45s; }
+.ig-choice-card { width: 100%; max-width: 340px; padding: 18px 16px 16px; border-radius: 22px; background: rgba(250,250,252,.97); color: #000; box-shadow: 0 18px 50px rgba(0,0,0,.35); transform: translateY(18px) scale(.96); opacity: 0; transition: transform .45s cubic-bezier(.2, .9, .3, 1.1), opacity .35s; }
+.ig-choice.show .ig-choice-card { transform: none; opacity: 1; transition-delay: .12s; }
+body.v-dark .ig-choice-card { background: rgba(38,38,42,.97); color: #fff; }
+.ig-choice-tt { margin: 0 4px 12px; text-align: center; font-size: 13px; opacity: .55; }
+.ig-choice-b { display: block; width: 100%; margin-top: 8px; padding: 14px 16px; border: 0; border-radius: 16px; background: #8f33ff; color: #fff; font: inherit; font-size: 15px; font-weight: 600; line-height: 1.35; text-align: center; cursor: pointer; word-break: keep-all; -webkit-tap-highlight-color: transparent; transition: transform .12s, filter .12s; }
+.ig-choice-b:active { transform: scale(.98); filter: brightness(.92); }
+
+/* 동영상 전용 플레이어 (스토리 방식) */
+.ig-vid { position: fixed; inset: 0; z-index: 55; display: flex; justify-content: center; background: #000; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .3s, visibility 0s .3s; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; -webkit-font-smoothing: antialiased; }
+.ig-vid.on { visibility: visible; opacity: 1; pointer-events: auto; transition: opacity .3s; }
+.ig-vid-box { position: relative; width: 100%; max-width: 470px; height: 100%; background: #000; overflow: hidden; color: #fff; }
+.ig-vid-box video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.ig-vid-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 72%, rgba(0,0,0,.55) 100%); }
+.ig-vid-top { position: absolute; left: 0; right: 0; top: 0; padding: calc(10px + env(safe-area-inset-top, 0px)) 10px 0; }
+.ig-vid-bar { height: 3px; border-radius: 2px; background: rgba(255,255,255,.35); overflow: hidden; }
+.ig-vid-bar i { display: block; height: 100%; width: 100%; background: #fff; transform-origin: left center; transform: scaleX(0); }
+.ig-vid-pf { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.ig-vid-pf img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: none; background: #3a3a3c; }
+.ig-vid-tx { flex: 1; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+.ig-vid-tx b { font-weight: 700; }
+.ig-vid-tx small { margin-left: 4px; font-size: 12px; opacity: .6; }
+.ig-vid-x { flex: none; width: 36px; height: 36px; border: 0; background: none; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ig-vid-msg { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-size: 14px; opacity: 0; transition: opacity .3s; pointer-events: none; color: rgba(255,255,255,.7); }
+.ig-vid-msg.on { opacity: 1; }
+.ig-vid-bot { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 14px; padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0px)); }
+.ig-vid-pill { flex: 1; height: 44px; border-radius: 22px; border: 1px solid rgba(255,255,255,.55); display: flex; align-items: center; padding: 0 16px; font-size: 15px; color: rgba(255,255,255,.85); }
+.ig-vid-bot svg { flex: none; }
 </style>
 </head>
 <body class="v-light">
@@ -397,7 +520,7 @@ body.v-lock { overflow: hidden; }
       
       <div class="p-cap"><b>jael77cm</b> 우리 둘은 맞았&#39;었&#39;지 두 눈이</div>
       
-      <div class="p-time sec">2시간 전</div>
+      <div class="p-time sec">4시간 전</div>
     </div>
   </article>
   <article class="post">
@@ -738,7 +861,7 @@ body.v-lock { overflow: hidden; }
     </div>
     <div class="p-body">
       <div class="p-likes"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><span><b>parkseongho394</b>님 외 <b>여러 명</b>이 좋아합니다</span></div>
-      <div class="p-cap"><b>jael77cm</b> 자유전공 콘서트 다녀왔어요 🫶 미디컴 아자아자! <span class="lk">@bndu_28th_media</span></div>
+      <div class="p-cap"><b>jael77cm</b> 자유전공 콘서트 다녀왔어요 🫶 미디컴 아자아자! <span class="lk">@bndu_38th_media</span></div>
       
       <div class="p-time sec">5월 3일</div>
     </div>
@@ -911,7 +1034,7 @@ body.v-lock { overflow: hidden; }
       
       <div class="p-cap"><b>jael77cm</b> 우리 둘은 맞았&#39;었&#39;지 두 눈이</div>
       
-      <div class="p-time sec">2시간 전</div>
+      <div class="p-time sec">4시간 전</div>
     </div>
   </article></div></section>
 <div class="v-ov" id="ov-c-0" data-closable hidden><div class="v-dim" data-close></div><div style="--fs:1" class="ig v-sheet" data-theme="light">
@@ -922,7 +1045,7 @@ body.v-lock { overflow: hidden; }
   <div class="c">
     <img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt="">
     <div class="c-b">
-      <div class="c-h"><b>rinalee3</b><span class="sec">2시간</span></div>
+      <div class="c-h"><b>rinalee3</b><span class="sec">4시간</span></div>
       <div class="c-t">왜그러냐 재현아진짜</div>
       <div class="c-a"><span>답글 달기</span></div>
       
@@ -932,7 +1055,7 @@ body.v-lock { overflow: hidden; }
   <div class="c rp">
     <img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt="">
     <div class="c-b">
-      <div class="c-h"><b>lonaz01</b><span class="sec">1시간</span></div>
+      <div class="c-h"><b>lonaz01</b><span class="sec">4시간</span></div>
       <div class="c-t"><span class="lk">@rinalee3</span> 진짜ㅈ같긴해</div>
       <div class="c-a"><span>답글 달기</span></div>
       
@@ -942,7 +1065,7 @@ body.v-lock { overflow: hidden; }
   <div class="c rp">
     <img class="av" src="https://lh3.googleusercontent.com/d/1ILfbzGi7EeJLMIZ664D9PVbgLkeW1JQh=w2000" alt="">
     <div class="c-b">
-      <div class="c-h"><b>jael77cm</b><span class="sec">45분</span><span class="sec">· 작성자</span></div>
+      <div class="c-h"><b>jael77cm</b><span class="sec">3시간</span><span class="sec">· 작성자</span></div>
       <div class="c-t"><span class="lk">@rinalee3</span> 왜그러십니까들</div>
       <div class="c-a"><span>답글 달기</span></div>
       <div class="c-more"><i></i>답글 2개 더 보기</div>
@@ -952,12 +1075,22 @@ body.v-lock { overflow: hidden; }
   <div class="c">
     <img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt="">
     <div class="c-b">
-      <div class="c-h"><b>zoonsikk</b><span class="sec">1시간</span></div>
+      <div class="c-h"><b>zinzoz</b><span class="sec">1시간</span></div>
       <div class="c-t">재결합해라그냥</div>
       <div class="c-a"><span>답글 달기</span></div>
       
     </div>
     <div class="c-l"><svg width="14" height="14" viewBox="0 0 24 24" ><path d="M12 21s-9-5.6-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.4-9 12-9 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>7</span></div>
+  </div>
+  <div class="c">
+    <img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt="">
+    <div class="c-b">
+      <div class="c-h"><b>axnskya</b><span class="sec">3시간</span></div>
+      <div class="c-t">ㅈ같네</div>
+      <div class="c-a"><span>답글 달기</span></div>
+      
+    </div>
+    <div class="c-l"><svg width="14" height="14" viewBox="0 0 24 24" ><path d="M12 21s-9-5.6-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.4-9 12-9 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>2</span></div>
   </div></div>
     <div class="s-foot">
       <div class="s-emo"><span>❤️</span><span>🙌</span><span>🔥</span><span>👏</span><span>😢</span><span>😍</span><span>😮</span><span>😂</span></div>
@@ -1591,17 +1724,17 @@ body.v-lock { overflow: hidden; }
     <img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt="">
     <div class="c-b">
       <div class="c-h"><b>luckiboiw</b><span class="sec">8주</span></div>
-      <div class="c-t">아 형 이건 너무 애교심하다</div>
+      <div class="c-t">아 형 이건 너무 애교가 심한데</div>
       <div class="c-a"><span>답글 달기</span><span class="al"><img class="av" src="https://lh3.googleusercontent.com/d/1ILfbzGi7EeJLMIZ664D9PVbgLkeW1JQh=w2000" alt=""><svg width="10" height="10" viewBox="0 0 24 24" ><path d="M12 21s-9-5.6-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.4-9 12-9 12z" fill="#ff3040"/></svg></span></div>
       
     </div>
     <div class="c-l"><svg width="14" height="14" viewBox="0 0 24 24" ><path d="M12 21s-9-5.6-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.4-9 12-9 12z" fill="#ff3040"/></svg><span>112</span></div>
   </div>
-  <div class="c">
+  <div class="c rp">
     <img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt="">
     <div class="c-b">
       <div class="c-h"><b>luckiboiw</b><span class="sec">8주</span></div>
-      <div class="c-t"><span class="lk">@luckiboiw</span> 아 근데 악플은 아니고 솔직히 잘생겼다 😁</div>
+      <div class="c-t"><span class="lk">@luckiboiw</span> 아 근데 악플은 아니고 솔직히 잘생겼긴해 😁</div>
       <div class="c-a"><span>답글 달기</span></div>
       
     </div>
@@ -1802,7 +1935,7 @@ body.v-lock { overflow: hidden; }
     </div>
     <div class="p-body">
       <div class="p-likes"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><span><b>parkseongho394</b>님 외 <b>여러 명</b>이 좋아합니다</span></div>
-      <div class="p-cap"><b>jael77cm</b> 자유전공 콘서트 다녀왔어요 🫶 미디컴 아자아자! <span class="lk">@bndu_28th_media</span></div>
+      <div class="p-cap"><b>jael77cm</b> 자유전공 콘서트 다녀왔어요 🫶 미디컴 아자아자! <span class="lk">@bndu_38th_media</span></div>
       
       <div class="p-time sec">5월 3일</div>
     </div>
@@ -2038,7 +2171,7 @@ body.v-lock { overflow: hidden; }
       <span class="dm-av" style="width:56px;height:56px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span>
       <div class="dm-tx">
         <div class="dm-n"><span class="t">axnskya</span></div>
-        <div class="dm-p"><span class="t">회원님: 안돼</span><span class="tm">&nbsp;· 5시간</span></div>
+        <div class="dm-p"><span class="t">회원님: 어우</span><span class="tm">&nbsp;· 3시간</span></div>
       </div>
       <span class="dm-cam"><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </div>
@@ -2062,7 +2195,7 @@ body.v-lock { overflow: hidden; }
       <span class="dm-av" style="width:56px;height:56px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span>
       <div class="dm-tx">
         <div class="dm-n"><span class="t">견둥이</span></div>
-        <div class="dm-p"><span class="t">내 후배가 너 소개받고 싶다는데??</span><span class="tm">&nbsp;· 10시간</span></div>
+        <div class="dm-p"><span class="t">내 후배가 너 소개받고 싶다던데??</span><span class="tm">&nbsp;· 10시간</span></div>
       </div>
       <i class="dm-dot"></i>
     </div>
@@ -2178,7 +2311,7 @@ body.v-lock { overflow: hidden; }
       <span class="dc-sav"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span>
       <div class="dc-c"><div class="dc-b">자취방 앞이야 재현아</div></div>
     </div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-1" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
@@ -2286,7 +2419,7 @@ body.v-lock { overflow: hidden; }
       <span class="dc-sav"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span>
       <div class="dc-c"><div class="dc-b">네?????</div></div>
     </div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-2" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
@@ -2376,49 +2509,58 @@ body.v-lock { overflow: hidden; }
       
       <div class="dc-c"><div class="dc-b" style="background:#a033ff;color:#fff">ㅜㅜㅜ</div></div>
     </div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-3" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span><div class="dc-t"><b><span class="t">axnskya</span></b></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="dc-body"><div class="dc-intro"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><b>axnskya</b><span>axnskya · Instagram</span><span class="dc-pbtn">프로필 보기</span></div><div class="dc-time">오늘 오후 7:12</div><div class="dc-m them first last">
+    <div class="dc-body"><div class="dc-intro"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><b>axnskya</b><span>axnskya · Instagram</span><span class="dc-pbtn">프로필 보기</span></div><div class="dc-time">오늘 오후 9:12</div><div class="dc-m them first last">
       <span class="dc-sav"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span>
       <div class="dc-c"><div class="dc-b">사귀고싶어요</div></div>
     </div><div class="dc-m me first last">
       
-      <div class="dc-c"><div class="dc-b" style="background:#a033ff;color:#fff">안돼</div></div>
+      <div class="dc-c"><div class="dc-b" style="background:#7a33ff;color:#fff">ㅈ같다면서요... ㅜㅜ</div></div>
+    </div><div class="dc-m them first">
+      <span class="dc-sav"></span>
+      <div class="dc-c"><div class="dc-b">사실좋아</div></div>
+    </div><div class="dc-m them last">
+      <span class="dc-sav"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span>
+      <div class="dc-c"><div class="dc-b">씨발</div></div>
+    </div><div class="dc-m me first last">
+      
+      <div class="dc-c"><div class="dc-b" style="background:#a033ff;color:#fff">어우</div></div>
     </div><div class="dc-seen">읽음</div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-4" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span><div class="dc-t"><b><span class="t">권민성</span></b><small>1시간 전 활동</small></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="dc-body"><div class="dc-intro"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><b>권민성</b><span>nuxxlo1 · Instagram</span><span class="dc-pbtn">프로필 보기</span></div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-5" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span><div class="dc-t"><b><span class="t">wdsdtj</span></b><small>1시간 전 활동</small></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="dc-body"><div class="dc-intro"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><b>wdsdtj</b><span>wdsdtj · Instagram</span><span class="dc-pbtn">프로필 보기</span></div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-6" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></span><div class="dc-t"><b><span class="t">견둥이</span></b><small>1시간 전 활동</small></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="dc-body"><div class="dc-intro"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><b>견둥이</b><span>ainskya · Instagram</span><span class="dc-pbtn">프로필 보기</span></div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-7" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="https://pbs.twimg.com/profile_images/2093346617114218496/4nzVlPAW_400x400.jpg" alt=""><i class="dm-on"></i></span><div class="dc-t"><b><span class="t">xkzlqhrhtlvdj</span></b></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="dc-body"><div class="dc-intro"><img class="av" src="https://pbs.twimg.com/profile_images/2093346617114218496/4nzVlPAW_400x400.jpg" alt=""><b>xkzlqhrhtlvdj</b><span>friend_8 · Instagram</span><span class="dc-pbtn">프로필 보기</span></div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-8" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="https://pbs.twimg.com/profile_images/2108169893455749120/T0Fxtd5X_400x400.jpg" alt=""></span><div class="dc-t"><b><span class="t">memynov</span></b><small>1시간 전 활동</small></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="dc-body"><div class="dc-intro"><img class="av" src="https://pbs.twimg.com/profile_images/2108169893455749120/T0Fxtd5X_400x400.jpg" alt=""><b>memynov</b><span>memynov · Instagram</span><span class="dc-pbtn">프로필 보기</span></div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-9" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
@@ -2459,13 +2601,13 @@ body.v-lock { overflow: hidden; }
 사랑해
 아니내똥개 ㅈㄴ귀여워</div></div>
     </div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <section class="v-scr" id="s-dm-10" hidden><div style="--fs:1" class="ig shot dmc phone" data-theme="light">
     <div class="sb"><span>12:39</span><span class="sb-r"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.3c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .7 10 10 0 0 0 .9 3.6L2 4.7a8.4 8.4 0 0 1 6-2.4zm0 3.3c1.4 0 2.6.5 3.6 1.4l1.1-1.1A6.7 6.7 0 0 0 8 4a6.7 6.7 0 0 0-4.7 1.9L4.4 7c1-.9 2.2-1.4 3.6-1.4zM8 9a1.6 1.6 0 0 1 1.2.5L8 11.3 6.8 9.5C7.1 9.2 7.5 9 8 9z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="1.6" height="9" rx="2" fill="#ff3b30"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg></span></div>
     <div class="dc-top"><span data-back><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M15 4.5 7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="dm-av" style="width:34px;height:34px"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><i class="dm-on"></i></span><div class="dc-t"><b><span class="t">tnrgidiiiiii</span></b><small>현재 활동 중</small></div><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="26" height="26" viewBox="0 0 24 24" ><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 10l5-3v10l-5-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="dc-body"><div class="dc-intro"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><b>tnrgidiiiiii</b><span>tnrgidiiiiii · Instagram</span><span class="dc-pbtn">프로필 보기</span></div></div>
-    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="ph">메시지 보내기...</span><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+    <div class="dc-foot"><div class="dc-in"><span class="dc-cam"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><input class="dc-input" type="text" placeholder="메시지 보내기..." enterkeyhint="send" autocomplete="off"><button type="button" class="dc-send">보내기</button><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 16l5-5 4 4 3-3 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M21 12a9 9 0 1 1-9-9h4l5 5zM16 3v5h5M8.5 14.5a4 4 0 0 0 7 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
   </div></section>
 <div class="v-ov v-st" id="ov-s-0" data-closable data-auto hidden><div class="story shot" style="background:#000000;--fs:1"><div class="st-grid" style="grid-template-columns:1fr;grid-template-rows:1fr;gap:0.5cqw;background:#ffffff">
     <div class="cell" data-cell="0"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABkAAAAOECAIAAAB2L2r1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABBySURBVHhe7cEBDQAAAMKg909tDjcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOBIDfJTAAE5K/+GAAAAAElFTkSuQmCC" alt="" style="width: 316.049%; height: 100%; left: -108.025%; top: 0%;"></div>
@@ -2542,6 +2684,61 @@ body.v-lock { overflow: hidden; }
       <div class="s-head" style="top:16.1cqw"><img class="av" src="https://lh3.googleusercontent.com/d/1ILfbzGi7EeJLMIZ664D9PVbgLkeW1JQh=w2000" alt=""><b>jael77cm</b><span class="tm">30주</span><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"></circle><circle cx="12" cy="12" r="1.6" fill="currentColor"></circle><circle cx="19" cy="12" r="1.6" fill="currentColor"></circle></svg><span class="v-x" data-close=""><svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></div>
       <div class="s-shade-b"></div><div class="s-own"><div class="s-viewers"><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""><img class="av" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23c7c7cc%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2239%22%20r%3D%2217%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M15%2094c3-20%2018-30%2035-30s32%2010%2035%2030z%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E" alt=""></div><span class="lbl">활동</span><span class="sp"></span><span class="s-oi"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 21s-9-5.6-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.4-9 12-9 12z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>하이라이트</span></span><span class="s-oi"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M22 3 9.218 10.083M11.698 20.334 22 3.001H2l7.218 7.083z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span>보내기</span></span><span class="s-oi"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"></circle><circle cx="12" cy="12" r="1.6" fill="currentColor"></circle><circle cx="19" cy="12" r="1.6" fill="currentColor"></circle></svg><span>더 보기</span></span></div>
     </div></div></div>
+
+<!-- ===== 추가 기능: 상단 푸시 알림 / 전화 수신 화면 ===== -->
+<div class="ig-push" id="ig-push" role="alert" aria-live="polite">
+  <div class="ig-push-card" id="ig-push-card">
+    <span class="ig-push-ico"><svg width="22" height="22" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor"/></svg></span>
+    <div class="ig-push-tx">
+      <div class="ig-push-hd"><span>INSTAGRAM</span><span>지금</span></div>
+      <div class="ig-push-tt" id="ig-push-tt">[jael77cm] 박성호</div>
+      <div class="ig-push-bd" id="ig-push-bd">잘 들어갔어?</div>
+    </div>
+  </div>
+</div>
+<div class="ig-call" id="ig-call" data-state="ring" hidden>
+  <div class="ig-call-in">
+    <div class="ig-call-ap">Instagram 음성 통화</div>
+    <div class="ig-call-av"><img id="ig-call-img" alt=""></div>
+    <div class="ig-call-name">박성호</div>
+    <div class="ig-call-st" id="ig-call-st">전화가 걸려오고 있어요...</div>
+    <div class="ig-call-sub" id="ig-call-sub"></div>
+    <div class="ig-call-btns">
+      <button type="button" class="ig-call-b no" id="ig-call-no"><i><svg width="30" height="30" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="#fff"/></svg></i><span id="ig-call-no-t">거절</span></button>
+      <button type="button" class="ig-call-b ok" id="ig-call-ok"><i><svg width="30" height="30" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z" fill="#fff"/></svg></i><span>받기</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- 선택지 모달 (전체 화면 블러) -->
+<div class="ig-choice" id="ig-choice" aria-hidden="false">
+  <div class="ig-choice-card" role="dialog" aria-label="답장 선택">
+    <div class="ig-choice-tt">보낼 답장을 선택하세요</div>
+    <button type="button" class="ig-choice-b" data-i="0">지나오다 불러 주면 잘 수 있을 듯ㅋㅋ</button>
+    <button type="button" class="ig-choice-b" data-i="1">바라봐줘요 불러 주라 예삐야ㅎㅎ</button>
+  </div>
+</div>
+<!-- 동영상 전용 플레이어 (인스타그램 스토리 방식) -->
+<div class="ig-vid" id="ig-vid">
+  <div class="ig-vid-box">
+    <video id="ig-vid-v" playsinline webkit-playsinline preload="auto"></video>
+    <div class="ig-vid-shade"></div>
+    <div class="ig-vid-top">
+      <div class="ig-vid-bar"><i id="ig-vid-fill"></i></div>
+      <div class="ig-vid-pf">
+        <img id="ig-vid-av" alt="">
+        <div class="ig-vid-tx"><b>박성호</b> 님이 회원님에게 <small>1분</small></div>
+        <button type="button" class="ig-vid-x" id="ig-vid-x" aria-label="닫기"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      </div>
+    </div>
+    <div class="ig-vid-msg" id="ig-vid-msg"></div>
+    <div class="ig-vid-bot">
+      <div class="ig-vid-pill">메시지 보내기...</div>
+      <svg width="28" height="28" viewBox="0 0 24 24"><path d="M12 20.5s-8-4.9-8-11A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5c0 6.1-8 11-8 11z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24"><path d="M21 3 3 10.5l7 2.5 2.5 7zM10 13l11-10" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+</div>
 <script>
 (function () {
   var all = function (q) { return Array.prototype.slice.call(document.querySelectorAll(q)); };
@@ -2553,6 +2750,7 @@ body.v-lock { overflow: hidden; }
     var c = cur(); if (!back && c && c !== id) stack.push(c);
     all('.v-scr').forEach(function (x) { x.hidden = x !== el; }); window.scrollTo(0, 0);
     var b = el.querySelector('.dc-body'); if (b) b.scrollTop = b.scrollHeight;
+    if (window.__igOnShow) window.__igOnShow(id);
   }
   window.addEventListener('load', function () { all('.dc-body').forEach(function (b) { b.scrollTop = b.scrollHeight; }); });
   function closeAll() { all('.v-ov[data-closable]').forEach(function (o) { o.hidden = true; }); document.body.classList.remove('v-lock'); clearTimeout(timer); }
@@ -2621,5 +2819,607 @@ body.v-lock { overflow: hidden; }
   });
 })();
 </script>
+
+<script>
+/* ===== 추가 기능 ===== */
+(function () {
+  var $ = function (q, r) { return (r || document).querySelector(q); };
+  var $$ = function (q, r) { return Array.prototype.slice.call((r || document).querySelectorAll(q)); };
+
+  /* ── 설정 ─────────────────────────────────────────
+     테스트용: 주소 뒤에 ?sec=5 를 붙이면 '가상의 1분'이 5초로 흘러서
+     12:43 이벤트를 20초 만에 볼 수 있어요. (기본값 60초 = 실제 1분)  */
+  var qs = new URLSearchParams(location.search);
+  var SEC_PER_MIN = Math.max(0.2, parseFloat(qs.get('sec')) || 60);
+  var START_MIN = 39;                    // 시작 시각 오전 12:39 (00:39)
+  var FIRST_MSG_MS = 10000;              // 접속 10초 뒤 박성호 '잘 들어갔어?' 도착
+  var VIDEO_DELAY_MS = 5000;             // '알았어 기다려' 5초 뒤 동영상 메시지 도착
+  var ME = 'jael77cm';
+  var SH = 's-dm-0';                     // 박성호 대화 화면 id
+  var SK = 's-dm-6';                     // 견둥이 대화 화면 id
+  var LINE_MS = 3000;                    // 통화 자막 간격
+  var INCOMING = [                       // 박성호가 먼저 건 전화(= '보고 싶어' 이벤트)
+    '나도 보고 싶어', '분명히 방금 보고 왔는데...', '자고 가라고?',
+    '...그래도 돼?', '알았어 자지 말고 기다려', '나도 사랑해, 재현아'
+  ];
+  var PATTERNS = {                       // 내가 거는 전화 (A/B/C)
+    A: ['뭐야, 왜 전화했어?', '...목소리 듣고 싶다고?', '방금까지 실컷 들었잖아요 재현씨',
+        'ㅋㅋㅋ나도 듣고 싶었어', '얼른 자 늦었어', '사랑해'],
+    B: ['안 자고 있었네?', '나는 피파 하느라...', '알았어 끄고 잘게',
+        '모닝콜 해 줄 테니까 푹 자', '사랑해 재현아'],
+    C: ['여보세요?', '... 아잇, 뭔 여보야', '여보... 맞기는 한데', '왜 대답이 없어?',
+        '재현이 너도 부끄럼을 타긴 하는구나...', '끊겠다고? 갑자기?!',
+        'ㅋㅋㅋ부끄러우면 부끄럽다고 하세요~', '알았어 끊을게']
+  };
+  var AFTER_CALL = ['잘 자요 재현 씨ㅋㅋㅋ🖤', '내일 봐', '까만 꿈 꿔 재현아🖤'];
+  var SK_FIRST = '내 후배가 너 소개받고 싶다던데??';
+  var SK_TIME = '(금) 오후 2:39';
+  var VID_SEC = 37;                      // 동영상 길이(초)
+  var VIDEOS = [                         // 선택지별 동영상 (Dropbox 직접 재생 주소)
+    'https://dl.dropboxusercontent.com/scl/fi/6rcdly13jg8ui6y9s5j20/.MP4?rlkey=08574lip8vfmw9o9wvfslotqu&st=00vra9an&dl=1',
+    'https://dl.dropboxusercontent.com/scl/fi/o04gqgpgqi829eyz35by4/.MP4?rlkey=ukipbea71wxpv7ilvpalbhbo8&st=wtk0rezl&dl=1'
+  ];
+  var CHOICES = ['지나오다 불러 주면 잘 수 있을 듯ㅋㅋ', '바라봐줘요 불러 주라 예삐야ㅎㅎ'];
+  var SK_TYPED = 'ㅈㅅㅈㅅ 나 좋아하는 사람이랑 다시 만나기로 했엉';
+
+  /* ── 1. 상단바 실시간 시계 ─────────────────────── */
+  var t0 = Date.now(), shown = -1, pushed = false, shArrived = false, shStarted = false, shLocked = false;
+  function fmt(m) {
+    var h = Math.floor(m / 60) % 24, mm = m % 60;
+    return (h % 12 || 12) + ':' + (mm < 10 ? '0' : '') + mm;
+  }
+  function tick() {
+    var vm = START_MIN + Math.floor((Date.now() - t0) / (SEC_PER_MIN * 1000));
+    if (vm !== shown) {
+      shown = vm;
+      var s = fmt(vm);
+      $$('.sb > span:first-child, .s-sb > span:first-child').forEach(function (el) {
+        if (el.textContent !== s) el.textContent = s;
+      });
+    }
+    if (!pushed && Date.now() - t0 >= FIRST_MSG_MS) {
+      pushed = true; shArrived = true;
+      deliver(SH, '잘 들어갔어?', { forcePush: true });
+      if (curId() === SH) setTimeout(startSH, 1500);
+    }
+  }
+
+  /* ── 공통 헬퍼 ─────────────────────────────────── */
+  function curId() { var v = $('.v-scr:not([hidden])'); return v ? v.id : ''; }
+  function body(id) { return $('.dc-body', document.getElementById(id)); }
+  function toBottom(b) { if (b) b.scrollTop = b.scrollHeight; }
+  function row(id) { return $('#s-dms .dm-row[data-go="' + id + '"]'); }
+  function nameOf(id) { var r = row(id), t = r && $('.dm-n .t', r); return t ? t.textContent : ''; }
+  function avatarOf(id) { var r = row(id), i = r && $('img.av', r); return i ? i.getAttribute('src') : ''; }
+  var camTpl = (function () { var c = $('#s-dms .dm-cam'); return c ? c.outerHTML : ''; })();
+
+  /* ── 2. DM 목록: 읽음 / 안 읽음 동기화 ──────────── */
+  function markRead(id) {
+    var r = row(id); if (!r) return;
+    r.classList.remove('unread');
+    var d = $('.dm-dot', r); if (d) d.remove();
+    if (!$('.dm-cam', r) && camTpl) r.insertAdjacentHTML('beforeend', camTpl);
+  }
+  function markUnread(id) {
+    var r = row(id); if (!r) return;
+    r.classList.add('unread');
+    var c = $('.dm-cam', r); if (c) c.remove();
+    if (!$('.dm-dot', r)) r.insertAdjacentHTML('beforeend', '<i class="dm-dot"></i>');
+  }
+  function updateRow(id, preview, unread) {
+    var r = row(id); if (!r) return;
+    var t = $('.dm-p .t', r), tm = $('.dm-p .tm', r);
+    if (t) t.textContent = preview;
+    if (tm) tm.innerHTML = '&nbsp;· 방금';
+    unread ? markUnread(id) : markRead(id);
+    var list = r.parentNode;
+    if (list.firstElementChild !== r) list.insertBefore(r, list.firstElementChild);
+    r.classList.remove('bump'); void r.offsetWidth; r.classList.add('bump');
+  }
+  // 대화창에 들어가면 읽음 처리 (기존 show()에서 호출됨)
+  window.__igOnShow = function (id) {
+    if (!/^s-dm-\d+$/.test(id)) return;
+    markRead(id);
+    if (id === SK) startSK();
+    if (id === SH && shArrived) setTimeout(startSH, 900);
+  };
+
+  /* ── 3. 메시지 추가 (보냄 / 받음 / 입력 중 표시 / 읽음) ── */
+  function addMine(id, text) {
+    var b = body(id); if (!b) return null;
+    $$('.dc-seen', b).forEach(function (n) { n.remove(); });     // '읽음'은 마지막 내 메시지에만
+    var prev = b.lastElementChild, group = prev && prev.classList.contains('dc-m') && prev.classList.contains('me');
+    if (group) prev.classList.remove('last');
+    var mine = $$('.dc-m.me .dc-b', b).pop();
+    var m = document.createElement('div');
+    m.className = 'dc-m me ' + (group ? '' : 'first ') + 'last pop';
+    m.innerHTML = '<div class="dc-c"><div class="dc-b"></div></div>';
+    var bub = $('.dc-b', m); bub.textContent = text;
+    if (mine && mine.getAttribute('style')) bub.setAttribute('style', mine.getAttribute('style'));
+    else bub.setAttribute('style', 'background:#8f33ff;color:#fff');
+    b.appendChild(m); toBottom(b);
+    return m;
+  }
+  function theirBubble(id, inner, cls) {
+    var b = body(id), prev = b.lastElementChild;
+    var group = prev && prev.classList.contains('dc-m') && prev.classList.contains('them');
+    if (group) { prev.classList.remove('last'); var sv = $('.dc-sav', prev); if (sv) sv.innerHTML = ''; }
+    var m = document.createElement('div');
+    m.className = 'dc-m them ' + (group ? '' : 'first ') + 'last pop ' + (cls || '');
+    m.innerHTML = '<span class="dc-sav"><img class="av" alt=""></span><div class="dc-c"><div class="dc-b"></div></div>';
+    $('.dc-sav img', m).src = avatarOf(id);
+    var bub = $('.dc-b', m); inner(bub);
+    b.appendChild(m); toBottom(b);
+    return m;
+  }
+  function addTheirs(id, text, video) {
+    return theirBubble(id, function (bub) {
+      bub.textContent = text;
+      if (video) { bub.classList.add('vid'); bub.setAttribute('data-v', video); }
+    });
+  }
+  function showTyping(id) {
+    removeTyping(id);
+    theirBubble(id, function (bub) { bub.className = 'dc-b dots'; bub.innerHTML = '<i></i><i></i><i></i>'; }, 'typing');
+  }
+  function removeTyping(id) { $$('.dc-m.typing', body(id)).forEach(function (n) { n.remove(); }); }
+  function showSeen(msgEl) {
+    if (!msgEl || !msgEl.parentNode) return;
+    var seen = document.createElement('div'); seen.className = 'dc-seen'; seen.textContent = '읽음';
+    msgEl.parentNode.insertBefore(seen, msgEl.nextSibling);
+    toBottom(msgEl.parentNode);
+  }
+
+  /* ── 7. 모든 DM 수신 공통 처리 ───────────────────
+     · 대화창 + DM 목록(미리보기/시간/읽지 않음)을 함께 갱신
+     · 그 대화창 안에 있지 않으면 상단 푸시 알림 배너 표시           */
+  var pushEl = $('#ig-push'), pushT = null, pushTarget = '';
+  function showPush(id, text) {
+    pushTarget = id;
+    $('#ig-push-tt').textContent = '[' + ME + '] ' + nameOf(id);
+    $('#ig-push-bd').textContent = text;
+    pushEl.classList.remove('show'); void pushEl.offsetWidth; pushEl.classList.add('show'); SFX.notify();
+    clearTimeout(pushT); pushT = setTimeout(hidePush, 5000);
+  }
+  function hidePush() { pushEl.classList.remove('show'); }
+  $('#ig-push-card').addEventListener('click', function () {
+    hidePush(); if (!pushTarget) return;
+    var link = document.createElement('span'); link.setAttribute('data-go', pushTarget);   // 기존 화면 전환 로직 재사용
+    document.body.appendChild(link); link.click(); link.remove();
+  });
+  function deliver(id, text, opts) {
+    var inChat = curId() === id;
+    removeTyping(id);
+    addTheirs(id, text, opts && opts.video);
+    updateRow(id, text, !inChat);
+    if (!inChat || (opts && opts.forcePush)) showPush(id, text); else SFX.receive();
+  }
+
+  /* ── 입력창 전송 ───────────────────────────────── */
+  function send(inp) {
+    var text = inp.value.trim(); if (!text) return null;
+    var scr = inp.closest('.v-scr'); if (!scr) return null;
+    var id = scr.id, msg = addMine(id, text); SFX.sent();
+    inp.value = ''; inp.closest('.dc-in').classList.remove('typing');
+    updateRow(id, '회원님: ' + text, false);
+    if (id === SH && /보고\s*싶어/.test(text) && !callBusy) triggerRead(msg);
+    return msg;
+  }
+  document.addEventListener('input', function (e) {
+    if (!e.target.classList.contains('dc-input')) return;
+    e.target.closest('.dc-in').classList.toggle('typing', !!e.target.value.trim());
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!e.target.classList.contains('dc-input')) return;
+    // 한글 조합 중 Enter는 무시 (마지막 글자가 두 번 전송되는 문제 방지)
+    if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); send(e.target); }
+  });
+  document.addEventListener('click', function (e) {
+    var s = e.target.closest('.dc-send'); if (!s) return;
+    var inp = $('.dc-input', s.closest('.dc-in')); send(inp); if (!inp.readOnly) inp.focus();
+  });
+
+  /* ── 5. '보고 싶어' → 3초 뒤 '읽음' + 전화 수신 ─── */
+  var callBusy = false;
+  function triggerRead(msgEl) {
+    callBusy = true;
+    setTimeout(function () { showSeen(msgEl); openCall('in'); }, 3000);
+  }
+
+  /* ── 6 · 8. 통화 (수신 / 발신) ──────────────────── */
+  var call = $('#ig-call'), stEl = $('#ig-call-st'), subEl = $('#ig-call-sub'), noT = $('#ig-call-no-t');
+  var lineTimer = null, clockTimer = null, endTimer = null, dialTimer = null, secs = 0;
+  var kind = 'in', lines = [], replyPending = false, bag = [];
+  $('#ig-call-img').src = avatarOf(SH);
+  function setState(s) { call.setAttribute('data-state', s); }
+  function clearTimers() { clearTimeout(lineTimer); clearInterval(clockTimer); clearTimeout(endTimer); clearTimeout(dialTimer); }
+  function reveal() { call.hidden = false; document.body.classList.add('call-open'); }
+
+  // A, B, C 패턴을 중복 없이 한 번씩 돌린 뒤, 다시 무작위로 순환
+  function pickPattern() {
+    if (!bag.length) bag = ['A', 'B', 'C'];
+    return PATTERNS[bag.splice(Math.floor(Math.random() * bag.length), 1)[0]];
+  }
+  function openCall(k) {                       // k: 'in' 수신, 'out' 발신
+    clearTimers(); kind = k; subEl.innerHTML = ''; replyPending = false; secs = 0;
+    if (k === 'in') {
+      lines = INCOMING; stEl.textContent = '전화가 걸려오고 있어요...'; noT.textContent = '거절'; setState('ring');
+    } else {
+      lines = pickPattern(); stEl.textContent = '연결 중...'; noT.textContent = '취소'; setState('dial');
+      dialTimer = setTimeout(connect, 2200);
+    }
+    reveal();
+  }
+  function closeCall() {
+    clearTimers(); call.hidden = true; document.body.classList.remove('call-open'); callBusy = false;
+    toBottom(body(SH));                        // 이전(대화) 화면으로 복귀
+    if (replyPending) {                        // 통화 후 박성호 자동 DM 답장
+      replyPending = false;
+      setTimeout(function () {
+        deliver(SH, AFTER_CALL[Math.floor(Math.random() * AFTER_CALL.length)], { forcePush: true });
+      }, 2000);
+    }
+  }
+  function endCall() {
+    clearTimers(); setState('end'); stEl.textContent = '통화 종료'; subEl.innerHTML = '';
+    endTimer = setTimeout(closeCall, 1400);
+  }
+  function showLine(i) {
+    subEl.innerHTML = '<div class="ig-call-line"><small>박성호</small><span></span></div>';
+    $('span', subEl).textContent = lines[i];
+  }
+  function connect() {                         // 통화 연결: 시간 타이머 + 3초 간격 자막
+    clearTimers(); setState('live'); noT.textContent = '통화 종료';
+    secs = 0; stEl.textContent = '00:00';
+    if (kind === 'out') replyPending = true;
+    clockTimer = setInterval(function () {
+      secs++; stEl.textContent = ('0' + Math.floor(secs / 60)).slice(-2) + ':' + ('0' + secs % 60).slice(-2);
+    }, 1000);
+    var i = 0; showLine(0);
+    (function next() {
+      lineTimer = setTimeout(function () {
+        i++;
+        if (i < lines.length) { showLine(i); next(); }
+        else endCall();                        // 마지막 자막 후 3초 뒤 자동 종료
+      }, LINE_MS);
+    })();
+  }
+  $('#ig-call-ok').addEventListener('click', connect);
+  $('#ig-call-no').addEventListener('click', function () {
+    if (call.getAttribute('data-state') === 'live') endCall(); else closeCall();
+  });
+  // 박성호 대화창 상단 전화 아이콘 → 발신
+  var phoneBtn = $('#' + SH + ' .dc-top > svg');
+  if (phoneBtn) {
+    phoneBtn.classList.add('dc-callbtn'); phoneBtn.setAttribute('role', 'button'); phoneBtn.setAttribute('aria-label', '음성 통화');
+    phoneBtn.addEventListener('click', function () { if (!callBusy && !shLocked) { callBusy = true; openCall('out'); } });
+  }
+
+  /* ── 9. 견둥이: 타이핑 자동 연출 + 실시간 답장 ──── */
+  (function seed() {                           // 10시간 전에 온 첫 메시지
+    var b = body(SK); if (!b) return;
+    var t = document.createElement('div'); t.className = 'dc-time'; t.textContent = SK_TIME;
+    b.appendChild(t);
+    var m = document.createElement('div'); m.className = 'dc-m them first last';
+    m.innerHTML = '<span class="dc-sav"><img class="av" alt=""></span><div class="dc-c"><div class="dc-b"></div></div>';
+    $('.dc-sav img', m).src = avatarOf(SK); $('.dc-b', m).textContent = SK_FIRST;
+    b.appendChild(m);
+  })();
+
+  // 두벌식 가상 키보드 (누르는 키가 실제로 반짝여요)
+  var CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ', JUNG = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+  var JONG = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+  var SPLIT = { 'ㄳ': 'ㄱㅅ', 'ㄵ': 'ㄴㅈ', 'ㄶ': 'ㄴㅎ', 'ㄺ': 'ㄹㄱ', 'ㄻ': 'ㄹㅁ', 'ㄼ': 'ㄹㅂ', 'ㄽ': 'ㄹㅅ', 'ㄾ': 'ㄹㅌ', 'ㄿ': 'ㄹㅍ', 'ㅀ': 'ㄹㅎ', 'ㅄ': 'ㅂㅅ',
+                'ㅘ': 'ㅗㅏ', 'ㅙ': 'ㅗㅐ', 'ㅚ': 'ㅗㅣ', 'ㅝ': 'ㅜㅓ', 'ㅞ': 'ㅜㅔ', 'ㅟ': 'ㅜㅣ', 'ㅢ': 'ㅡㅣ',
+                'ㄲ': 'ㄱ', 'ㄸ': 'ㄷ', 'ㅃ': 'ㅂ', 'ㅆ': 'ㅅ', 'ㅉ': 'ㅈ', 'ㅒ': 'ㅐ', 'ㅖ': 'ㅔ' };
+  function keysOf(ch) {                        // 글자 → 눌러야 하는 자모 키들
+    var c = ch.charCodeAt(0), j;
+    if (ch === ' ') return [' '];
+    if (c >= 0xAC00 && c <= 0xD7A3) { var n = c - 0xAC00; j = [CHO[Math.floor(n / 588)], JUNG[Math.floor(n % 588 / 28)], JONG[n % 28]].join(''); }
+    else j = ch;
+    return j.split('').reduce(function (a, x) { return a.concat((SPLIT[x] || x).split('')); }, []);
+  }
+  function buildKb() {
+    var rows = ['ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔ', 'ㅁㄴㅇㄹㅎㅗㅓㅏㅣ', 'ㅋㅌㅊㅍㅠㅜㅡ'];
+    var k = function (c) { return '<span class="ig-kb-k" data-k="' + c + '">' + c + '</span>'; };
+    var kb = document.createElement('div'); kb.className = 'ig-kb';
+    kb.innerHTML = '<div class="ig-kb-in">' +
+      '<div class="ig-kb-r">' + rows[0].split('').map(k).join('') + '</div>' +
+      '<div class="ig-kb-r">' + rows[1].split('').map(k).join('') + '</div>' +
+      '<div class="ig-kb-r"><span class="ig-kb-k w">⇧</span>' + rows[2].split('').map(k).join('') + '<span class="ig-kb-k w">⌫</span></div>' +
+      '<div class="ig-kb-r"><span class="ig-kb-k w">123</span><span class="ig-kb-k w">☺</span><span class="ig-kb-k sp" data-k=" ">스페이스</span><span class="ig-kb-k go" data-k="go">보내기</span></div></div>';
+    return kb;
+  }
+  /* ── 효과음 (Web Audio로 직접 합성: 알림음 / 키보드 타자음 / 전송음) ──
+     브라우저 정책상 화면을 한 번 터치(클릭)해야 소리가 켜진다. 동영상 재생 중에는 효과음을 내지 않는다. */
+  var SFX = (function () {
+    var ctx = null, master = null, last = 0;
+    function init() {
+      if (!ctx) {
+        var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+        try { ctx = new AC(); master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination); } catch (e) { ctx = null; return null; }
+      }
+      if (ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+      return ctx;
+    }
+    ['pointerdown', 'touchstart', 'keydown', 'click'].forEach(function (ev) {
+      document.addEventListener(ev, init, { passive: true });
+    });
+    function ready() { return !(typeof vidOn !== 'undefined' && vidOn) && init() && ctx.state === 'running'; }
+    function env(g, t, a, d, peak) {
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + a);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + a + d);
+    }
+    function bell(freq, t, dur, vol) {                    // 맑은 종소리 같은 음 (기본음 + 배음)
+      [[1, 1], [2.01, 0.28], [3.02, 0.1]].forEach(function (h) {
+        var o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = freq * h[0];
+        env(g, t, 0.008, dur, vol * h[1]);
+        o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.05);
+      });
+    }
+    function noise(t, dur) {
+      var n = Math.max(1, Math.floor(ctx.sampleRate * dur)), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
+      for (var i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+      var src = ctx.createBufferSource(); src.buffer = b; return src;
+    }
+    return {
+      notify: function () {                              // 알림음 (트라이톤 느낌의 3음 차임)
+        if (!ready()) return; var t = ctx.currentTime + 0.02;
+        bell(1318.5, t, 0.5, 0.32); bell(1568, t + 0.13, 0.5, 0.32); bell(2093, t + 0.26, 0.9, 0.34);
+      },
+      receive: function () {                             // 대화창 안에서 메시지가 왔을 때 (짧은 2음)
+        if (!ready()) return; var t = ctx.currentTime + 0.02;
+        bell(1760, t, 0.28, 0.26); bell(2349, t + 0.09, 0.45, 0.26);
+      },
+      sent: function () {                                // 메시지 보낼 때 휙 하는 소리
+        if (!ready()) return; var t = ctx.currentTime + 0.01;
+        var s = noise(t, 0.2), f = ctx.createBiquadFilter(), g = ctx.createGain();
+        f.type = 'bandpass'; f.Q.value = 0.9; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(5200, t + 0.18);
+        env(g, t, 0.03, 0.17, 0.35); s.connect(f); f.connect(g); g.connect(master); s.start(t);
+      },
+      key: function () {                                 // 키보드 타자음: 낮고 둔탁한 '톡' (아이폰 키보드 느낌)
+        if (!ready()) return; var now = ctx.currentTime; if (now - last < 0.025) return; last = now;
+        var t = now + 0.005, o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+        o.type = 'sine'; o.frequency.setValueAtTime(330, t); o.frequency.exponentialRampToValueAtTime(130, t + 0.05);
+        lp.type = 'lowpass'; lp.frequency.value = 900;
+        env(g, t, 0.003, 0.055, 0.42); o.connect(lp); lp.connect(g); g.connect(master); o.start(t); o.stop(t + 0.09);
+        var s = noise(t, 0.015), f = ctx.createBiquadFilter(), g2 = ctx.createGain();   // 아주 약한 접촉음
+        f.type = 'lowpass'; f.frequency.value = 1400; env(g2, t, 0.001, 0.012, 0.07); s.connect(f); f.connect(g2); g2.connect(master); s.start(t);
+      }
+    };
+  })();
+
+  function press(kb, key) {
+    var el = $('[data-k="' + key + '"]', kb); if (!el) return;
+    SFX.key();
+    el.classList.add('hit'); setTimeout(function () { el.classList.remove('hit'); }, 90);
+  }
+
+  /* 공용: 가상 키보드를 올리고 글자를 하나씩 타이핑 → 자동 전송 */
+  var kbs = {};
+  function kbShow(id) {
+    if (kbs[id]) return kbs[id];
+    var ig = $('.ig', document.getElementById(id)), kb = buildKb();
+    ig.appendChild(kb); ig.classList.add('kb-on'); kbs[id] = kb;
+    setTimeout(function () { kb.classList.add('open'); }, 60);
+    var f = setInterval(function () { toBottom(body(id)); }, 40);       // 키보드가 올라오는 동안 대화 맨 아래 유지
+    setTimeout(function () { clearInterval(f); }, 700);
+    return kb;
+  }
+  function kbHide(id) {
+    var kb = kbs[id]; if (!kb) return; delete kbs[id];
+    var ig = kb.parentNode; kb.classList.remove('open'); ig.classList.remove('kb-on');
+    var f = setInterval(function () { toBottom(body(id)); }, 40);
+    setTimeout(function () { clearInterval(f); kb.remove(); toBottom(body(id)); }, 450);
+  }
+  function typeAndSend(id, text, cb) {
+    var inp = $('.dc-input', document.getElementById(id)); inp.readOnly = true;
+    var fresh = !kbs[id], kb = kbShow(id), i = 0;
+    function type() {
+      if (i >= text.length) { setTimeout(finish, 650); return; }
+      var ch = text.charAt(i++);
+      inp.value = text.slice(0, i);
+      inp.dispatchEvent(new Event('input', { bubbles: true }));
+      keysOf(ch).forEach(function (key, n) { setTimeout(function () { press(kb, key); }, n * 55); });
+      setTimeout(type, 120 + Math.random() * 90);
+    }
+    function finish() {
+      press(kb, 'go');
+      setTimeout(function () { var msg = send(inp); if (cb) cb(msg); }, 200);
+    }
+    setTimeout(type, fresh ? 1000 : 350);
+  }
+  function chain(steps) {                       // [[지연ms, 함수], ...] 를 순서대로 실행 (지연은 직전 단계 기준)
+    var k = 0;
+    (function run() {
+      if (k >= steps.length) return;
+      var s = steps[k++];
+      setTimeout(function () { s[1](); run(); }, s[0]);
+    })();
+  }
+  function irregularTyping(id, segs, done) {    // [[켜짐?, ms], ...] 불규칙하게 나타났다 사라지는 입력 중 표시
+    var k = 0;
+    (function run() {
+      if (k >= segs.length) { removeTyping(id); done(); return; }
+      var s = segs[k++];
+      s[0] ? showTyping(id) : removeTyping(id);
+      setTimeout(run, s[1]);
+    })();
+  }
+
+  /* ── 9. 견둥이 시나리오 ─────────────────────────── */
+  var skStarted = false;
+  function startSK() {
+    if (skStarted) return; skStarted = true;
+    typeAndSend(SK, SK_TYPED, function (msg) {
+      $('.dc-input', document.getElementById(SK)).readOnly = false;
+      kbHide(SK);
+      chain([
+        [2000, function () { showSeen(msg); showTyping(SK); }],          // 2초 뒤 읽음 + 입력 중(1초)
+        [1000, function () { deliver(SK, '엥?'); showTyping(SK); }],     // 엥? → 입력 중(3초)
+        [3000, function () { deliver(SK, '누구랑 재결합을 해??'); }]
+      ]);
+    });
+  }
+
+  /* ── 2. 박성호 12:40 시나리오 ───────────────────── */
+  function lockSH(on) {
+    shLocked = on;
+    var inp = $('.dc-input', document.getElementById(SH)); if (inp) inp.readOnly = on;
+  }
+  function startSH() {
+    if (shStarted || !shArrived || curId() !== SH) return;
+    shStarted = true; lockSH(true);
+    typeAndSend(SH, '오야 잘들어갔지 ㅎㅎ', function () {
+      setTimeout(function () {
+        typeAndSend(SH, '성호도 잘 들어갔어?', function (msg) {
+          kbHide(SH);
+          chain([
+            [1000, function () { showSeen(msg); showTyping(SH); }],                    // 1초 뒤 읽음 → 입력 중(2초)
+            [2000, function () { deliver(SH, '나 방금 도착했어'); }],
+            [0,    function () {                                                       // 불규칙 입력 중(합계 3초)
+              irregularTyping(SH, [[1, 700], [0, 350], [1, 500], [0, 450], [1, 600], [0, 400]], function () {
+                deliver(SH, '지금 바로 잘 거야 재현아?');
+                setTimeout(function () {
+                  typeAndSend(SH, '졸린데 자장가 듣고 싶어ㅓ..', function () { kbHide(SH); openChoice(); });
+                }, 1000);
+              });
+            }]
+          ]);
+        });
+      }, 800);
+    });
+  }
+
+  /* 선택지 모달: 화면 전체 블러 + 2가지 선택지 */
+  var choiceEl = $('#ig-choice');
+  function openChoice() { void choiceEl.offsetWidth; choiceEl.classList.add('show'); }
+  $$('.ig-choice-b', choiceEl).forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var n = +btn.getAttribute('data-i');
+      choiceEl.classList.remove('show');
+      addMine(SH, CHOICES[n]); updateRow(SH, '회원님: ' + CHOICES[n], false);
+      chain([
+        [400,  function () { showTyping(SH); }],                                      // 2초간 입력 중
+        [2000, function () { deliver(SH, '알았어 기다려'); lockSH(false); }],
+        [VIDEO_DELAY_MS, function () { deliver(SH, '▶동영상 재생', { video: VIDEOS[n] }); }]   // 1분 뒤 동영상 도착
+      ]);
+    });
+  });
+
+  /* ── 3. 동영상 전용 플레이어 (스토리 방식) ──────── */
+  var vidEl = $('#ig-vid'), vid = $('#ig-vid-v'), fill = $('#ig-vid-fill'), vmsg = $('#ig-vid-msg');
+  var vidOn = false, vidBub = null, vidFirst = false, vidRaf = 0, vidT0 = 0;
+  $('#ig-vid-av').src = avatarOf(SH);
+  function vidLoop() {
+    if (!vidOn) return;
+    var playing = vid.currentTime > 0 && !vid.paused, now = performance.now(), sec, dur;
+    if (playing) { sec = vid.currentTime; dur = isFinite(vid.duration) && vid.duration > 0 ? vid.duration : VID_SEC; }
+    else if (vidFailed || now - vidT0 > 3000) { sec = (now - vidT0) / 1000; dur = VID_SEC; }   // 영상이 안 열리면 37초 타이머로 대체
+    else { sec = 0; dur = VID_SEC; }
+    fill.style.transform = 'scaleX(' + Math.min(1, sec / dur) + ')';
+    if (sec >= dur) { closeVideo(); return; }
+    vidRaf = requestAnimationFrame(vidLoop);
+  }
+  /* Dropbox 주소 하나에서 재생 후보 주소 여러 개를 만든다 (앞에서부터 차례로 시도) */
+  function srcCandidates(u) {
+    var m = u.match(/\/scl\/fi\/([^\/]+)\/[^?]*\?(.*)$/), out = [];
+    if (m) {
+      var rl = (m[2].match(/rlkey=([^&]+)/) || [])[1] || '';
+      var q = rl ? 'rlkey=' + rl + '&raw=1' : 'raw=1';
+      out.push('https://dl.dropboxusercontent.com/scl/fi/' + m[1] + '/video.mp4?' + q);
+      out.push('https://www.dropbox.com/scl/fi/' + m[1] + '/video.mp4?' + q);
+    }
+    out.push(u);
+    return out;
+  }
+  var vidCands = [], vidIdx = 0, vidFailed = false;
+  function vidNote(t) { vmsg.textContent = t; vmsg.classList.add('on'); }
+  function tryVideoSrc() {
+    vid.src = vidCands[vidIdx];
+    vid.load();
+    var p = vid.play();
+    if (p && p.catch) p.catch(function (err) {
+      if (err && err.name === 'NotAllowedError') {          // 소리 있는 자동재생 차단 → 무음으로 재생 후 탭하면 소리 켜기
+        vid.muted = true; vidNote('화면을 탭하면 소리가 켜져요');
+        var q = vid.play(); if (q && q.catch) q.catch(function () {});
+      }
+    });
+  }
+  function videoFailed() {
+    if (!vidOn) return;
+    if (vidIdx < vidCands.length - 1) { vidIdx++; tryVideoSrc(); return; }   // 다음 주소로 재시도
+    vidFailed = true;
+    var c = vid.error ? vid.error.code : 0;
+    vidNote(c === 4 ? '영상을 불러올 수 없어요 (주소가 만료됐거나 지원하지 않는 형식)' : '영상을 불러오지 못했어요 (오류 ' + c + ')');
+  }
+  vid.addEventListener('error', videoFailed);
+  vid.addEventListener('loadstart', function () { if (vidOn && !vidFailed) vidNote('불러오는 중...'); });
+  vid.addEventListener('loadedmetadata', function () {
+    // 소리/길이는 읽히는데 화면 크기가 0 = 영상 트랙(HEVC/H.265 등)을 이 브라우저가 못 푸는 경우
+    if (vidOn && vid.videoWidth === 0 && vid.duration > 0) { vidFailed = true; vidNote('이 브라우저는 영상 코덱(HEVC)을 지원하지 않아요. Safari 또는 H.264로 변환한 영상이 필요해요'); }
+  });
+  vid.addEventListener('canplay', function () { if (vidOn && !vidFailed && vid.muted === false) vmsg.classList.remove('on'); });
+  function openVideo(bub) {
+    if (vidOn || bub.classList.contains('dim')) return;
+    vidBub = bub; vidFirst = bub.getAttribute('data-w') !== '1';
+    if (!vidFirst) bub.classList.add('dim');                    // 재시청: 회색 + 더 이상 볼 수 없음
+    vidOn = true; vidFailed = false; vmsg.textContent = ''; vmsg.classList.remove('on'); fill.style.transform = 'scaleX(0)';
+    vid.muted = false; vid.volume = 1;
+    vidCands = srcCandidates(bub.getAttribute('data-v')); vidIdx = 0;
+    vidEl.classList.add('on'); document.body.classList.add('call-open');
+    tryVideoSrc();           // 사용자가 직접 누른 클릭 안에서 호출되므로 소리와 함께 자동 재생됨
+    vidT0 = performance.now(); vidRaf = requestAnimationFrame(vidLoop);
+  }
+  function closeVideo() {
+    if (!vidOn) return; vidOn = false; cancelAnimationFrame(vidRaf);
+    vid.pause(); vid.removeAttribute('src'); vid.load();
+    vidEl.classList.remove('on'); document.body.classList.remove('call-open');
+    var bub = vidBub, first = vidFirst; vidBub = null;
+    if (first && bub) { bub.textContent = '▶동영상'; bub.setAttribute('data-w', '1'); afterVideo(); }
+  }
+  vid.addEventListener('ended', closeVideo);
+  vid.addEventListener('playing', function () { if (!vid.muted && !vidFailed) vmsg.classList.remove('on'); });
+    $('#ig-vid-x').addEventListener('click', closeVideo);
+  vidEl.addEventListener('click', function (e) {          // 무음으로 시작됐다면 탭해서 소리 켜기
+    if (e.target.closest('#ig-vid-x')) return;
+    if (vid.muted) { vid.muted = false; vid.volume = 1; vmsg.classList.remove('on'); }
+  });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.dc-b.vid'); if (b) openVideo(b);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && vidOn) closeVideo(); });
+
+  /* 동영상 관람 후 대화 마무리 */
+  function reactHeart(m) {
+    if (!m) return;
+    m.classList.add('has-react');
+    var r = document.createElement('span'); r.className = 'dc-react pop'; r.textContent = '❤️';
+    $('.dc-c', m).appendChild(r);
+    updateRow(SH, '회원님이 메시지에 ❤️ 반응을 남겼습니다', false);
+  }
+  function afterVideo() {
+    lockSH(true);
+    setTimeout(function () {
+      typeAndSend(SH, '아니 노래 너무 잘 부르는데요 성호씨??', function (msg) {
+        kbHide(SH);
+        var last;
+        chain([
+          [1000, function () { showSeen(msg); }],
+          [200,  function () { showTyping(SH); }],
+          [2000, function () { deliver(SH, 'ㅋㅋㅋ영광이네요 명재현씨~'); showTyping(SH); }],
+          [2000, function () { removeTyping(SH); last = addTheirs(SH, '잘자🌙'); updateRow(SH, '잘자🌙', curId() !== SH); if (curId() !== SH) showPush(SH, '잘자🌙'); }],
+          [1000, function () { reactHeart(last); lockSH(false); }]
+        ]);
+      });
+    }, 700);
+  }
+
+  tick(); setInterval(tick, 250);
+})();
+</script>
+
 </body>
 </html>
